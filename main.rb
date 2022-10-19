@@ -15,12 +15,19 @@ class MentalState
 end
 
 def audit_sanity(bedtime_mental_state)
+
+  begin
+    
+    rescue
+  end
   return 0 unless bedtime_mental_state.auditable?
+
   if bedtime_mental_state.audit!.ok?
     MorningMentalState.new(:ok)
   else
     MorningMentalState.new(:not_ok)
   end
+
 end
 
 if audit_sanity(bedtime_mental_state) == 0
@@ -28,8 +35,6 @@ if audit_sanity(bedtime_mental_state) == 0
 else
   new_state = audit_sanity(bedtime_mental_state)
 end
-
-
 
 
 
@@ -65,4 +70,7 @@ if machine.ready?
   machine.make!
 else
   puts "sadness"
+end
+
+class AuditError < RuntimeError
 end
