@@ -30,11 +30,13 @@ def audit_sanity(bedtime_mental_state)
 
 end
 
-if audit_sanity(bedtime_mental_state) == 0
-  puts 'error'
-else
-  new_state = audit_sanity(bedtime_mental_state)
-end
+
+# commented this out, beacause 5 Part 2 now returns default MorningMentalState
+# if audit_sanity(bedtime_mental_state) == 0
+#  puts 'error'
+# else
+new_state = audit_sanity(bedtime_mental_state)
+# end
 
 
 
@@ -78,5 +80,16 @@ class AuditError < RuntimeError
 end
 
 class MyCandyMachine < CandyMachine
-  name
+  def prepare
+    prepare
+  end
+
+  def ready?
+    ready?
+  end
+
+  def make!
+    make!
+  end
+
 end
