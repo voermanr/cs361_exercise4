@@ -17,10 +17,10 @@ end
 def audit_sanity(bedtime_mental_state)
 
   begin
-    
-    rescue
+    raise (AuditError) unless bedtime_mental_state.auditable?
+  rescue (AuditError)
+    puts 'External service is not online. Try again later'
   end
-  return 0 unless bedtime_mental_state.auditable?
 
   if bedtime_mental_state.audit!.ok?
     MorningMentalState.new(:ok)
@@ -31,7 +31,7 @@ def audit_sanity(bedtime_mental_state)
 end
 
 if audit_sanity(bedtime_mental_state) == 0
-  puts "error"
+  puts 'error'
 else
   new_state = audit_sanity(bedtime_mental_state)
 end
@@ -45,7 +45,7 @@ class BedtimeMentalState < MentalState ; end
 class MorningMentalState < MentalState ; end
 
 def audit_sanity(bedtime_mental_state)
-  return nil unless bedtime_mental_state.auditable?
+  return MorningMentalState.new unless bedtime_mental_state.auditable?
   if bedtime_mental_state.audit!.ok?
     MorningMentalState.new(:ok)
   else
@@ -63,14 +63,20 @@ new_state.do_work
 
 require 'candy_service'
 
-machine = CandyMachine.new
+machine = MyCandyMachine.new
 machine.prepare
 
 if machine.ready?
   machine.make!
 else
-  puts "sadness"
+  puts 'sadness'
 end
 
+# Classes I had to implement
 class AuditError < RuntimeError
+
+end
+
+class MyCandyMachine < CandyMachine
+  name
 end
